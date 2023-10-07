@@ -1,27 +1,8 @@
-const express = require("express");
-const userModel = require("../models/mahasiswaSchema");
-const app = express();
+"use strict";
 
-app.post("/add_user", async (request, response) => {
-  const user = new userModel(request.body);
+const router = require("express").Router();
+const UserController = require("../controllers/userController");
 
-  try {
-    await user.save();
-    response.send(user);
-  } catch (error) {
-    console.log(request.body);
-    response.status(500).send(error);
-  }
-});
+router.post("/login", UserController.login);
 
-app.get("/users", async (request, response) => {
-  const users = await userModel.find({});
-
-  try {
-    response.send(users);
-  } catch (error) {
-    response.status(500).send(error);
-  }
-});
-
-module.exports = app;
+module.exports = router;
