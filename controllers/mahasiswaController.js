@@ -1,3 +1,6 @@
+"use strict";
+const mahasiswaModel = require("../models/mahasiswaSchema");
+
 // create;
 // edit;
 // selectAll;
