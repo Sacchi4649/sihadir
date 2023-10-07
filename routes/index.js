@@ -1,8 +1,8 @@
 "use strict";
 
-const router = require("express");
+const router = require("express").Router();
 const MahasiswaRoute = require("./mahasiswaRoute");
 
-router.request("/mahasiswa", MahasiswaRoute);
+router.use("/mahasiswa", MahasiswaRoute);
 
 module.exports = router;
