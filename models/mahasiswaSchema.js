@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+mongoose.pluralize(null);
 const mahasiswaSchema = new mongoose.Schema(
   {
     nama: {
@@ -29,6 +29,6 @@ const mahasiswaSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Mahasiswa = mongoose.model(null, mahasiswaSchema, "mahasiswa");
+const Mahasiswa = mongoose.model("mahasiswa", mahasiswaSchema);
 
 module.exports = Mahasiswa;

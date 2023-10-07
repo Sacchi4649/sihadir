@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+mongoose.pluralize(null);
 const dosenSchema = new mongoose.Schema(
   {
     nama: {
@@ -29,6 +29,6 @@ const dosenSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Dosen = mongoose.model(null, dosenSchema, "dosen");
+const Dosen = mongoose.model("dosen", dosenSchema);
 
 module.exports = Dosen;
