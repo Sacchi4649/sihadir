@@ -8,7 +8,7 @@ class MahasiswaController {
       await mahasiswa.save();
       response.status(200).json({ mahasiswa });
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" });
+      response.status(500).json({ message: "Internal server error" });
     }
   }
 }
