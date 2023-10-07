@@ -26,7 +26,7 @@ const dosenSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { timestamps }
+  { timestamps: true }
 );
 
 const Dosen = mongoose.model(null, dosenSchema, "dosen");
