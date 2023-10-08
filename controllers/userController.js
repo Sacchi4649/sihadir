@@ -9,39 +9,21 @@ class UserController {
       const { nama, password } = request.body;
       const findMahasiswa = await mahasiswaModel.findOne({ nama: nama }).exec();
       const findDosen = await dosenModel.findOne({ nama: nama }).exec();
-      //   if (findMahasiswa) {
-      //     if (findMahasiswa.password == password) {
-      //       response.status(200).json({ message: "Login mahasiswa berhasil" });
-      //     } else {
-      //       response.status(400).json({ message: "Password salah!" });
-      //     }
-      //   } else {
-      //     response.status(400).json({ message: "Mahasiswa tidak ditemukan" });
-      //   }
 
-      //   if (findDosen) {
-      //     if (findDosen.password == password) {
-      //       response.status(200).json({ message: "Login dosen berhasil" });
-      //     } else {
-      //       response.status(400).json({ message: "Password salah!" });
-      //     }
-      //   } else {
-      //     response.status(400).json({ message: "Dosen tidak ditemukan" });
-      //   }
       if (findMahasiswa) {
         if (findMahasiswa.password == password) {
           response.status(200).json({ message: "Login mahasiswa berhasil" });
         } else {
-          response.status(400).json({ message: "Password mahasiswa salah!" });
+          response.status(400).json({ message: "Username/Password salah!" });
         }
       } else if (findDosen) {
         if (findDosen.password == password) {
           response.status(200).json({ message: "Login dosen berhasil" });
         } else {
-          response.status(400).json({ message: "Password dosen salah!" });
+          response.status(400).json({ message: "Username/Password salah!" });
         }
       } else {
-        response.status(400).json({ message: "User tidak ditemukan" });
+        response.status(400).json({ message: "Username/Password salah!" });
       }
     } catch (error) {
       response.status(500).json({ message: "Internal server error" });
