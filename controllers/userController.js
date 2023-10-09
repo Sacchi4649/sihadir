@@ -12,10 +12,12 @@ class UserController {
   static async addUser(request, response, next) {
     const user = new userModel({
       username: request.body.username,
-      password: passwordEncryption(req.body.password),
+      password: passwordEncryption(request.body.password),
       role: request.body.role,
     });
+
     try {
+      const username = request.body.username;
       const role = request.body.role;
       const checkAvailaibility = await userModel.findOne({
         username: username,
@@ -29,7 +31,7 @@ class UserController {
             response.status(400).json({ message: "Username tidak tersedia" });
           }
         } else if (role == "dosen") {
-          if (await dosenModel.findOne({ nip: username })) {
+          if (await dosenModel.findOne({ nip: user.username })) {
             await user.save();
             response.status(200).json({ user });
           } else {
@@ -55,7 +57,7 @@ class UserController {
 
   static async getOneUser(request, response, next) {
     try {
-      const id = request.params;
+      const { id } = request.params;
       const findUser = await userModel.findOne({ _id: id });
       response.status(200).json({ user: findUser });
     } catch (error) {
@@ -83,13 +85,10 @@ class UserController {
         response.status(400).json({ message: "Username/Password salah!" });
       }
     } catch (error) {
-      console.log(error);
-      // response.status(500).json({ message: "Internal server error" });
+      response.status(500).json({ message: "Internal server error" });
       return;
     }
   }
 }
 
 module.exports = UserController;
-// login
-// logout
