@@ -3,12 +3,19 @@
 const mahasiswaModel = require("../models/mahasiswaSchema");
 const dosenModel = require("../models/dosenSchema");
 const userModel = require("../models/userSchema");
+const {
+  passwordEncryption,
+  passwordValidation,
+} = require("../utils/passwordHandler");
 
 class UserController {
-  static async createUser(request, response, next) {
-    const user = new userModel(request.body);
+  static async addUser(request, response, next) {
+    const user = new userModel({
+      username: request.body.username,
+      password: passwordEncryption(req.body.password),
+      role: request.body.role,
+    });
     try {
-      const username = request.body.username;
       const role = request.body.role;
       const checkAvailaibility = await userModel.findOne({
         username: username,
@@ -40,6 +47,16 @@ class UserController {
   static async getAllUser(request, response, next) {
     try {
       const findUser = await userModel.find();
+      response.status(200).json({ user: findUser });
+    } catch (error) {
+      response.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  static async getOneUser(request, response, next) {
+    try {
+      const id = request.params;
+      const findUser = await userModel.findOne({ _id: id });
       response.status(200).json({ user: findUser });
     } catch (error) {
       response.status(500).json({ message: "Internal server error" });

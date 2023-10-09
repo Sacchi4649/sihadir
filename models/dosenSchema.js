@@ -6,9 +6,6 @@ const dosenSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    umur: {
-      type: Number,
-    },
     gender: {
       type: String,
     },

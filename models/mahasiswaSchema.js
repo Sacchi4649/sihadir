@@ -6,10 +6,6 @@ const mahasiswaSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    umur: {
-      type: Number,
-      default: 0,
-    },
     gender: {
       type: String,
     },

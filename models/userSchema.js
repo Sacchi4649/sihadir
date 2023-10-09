@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["mahasiswa", "dosen"],
+    enum: ["mahasiswa", "dosen", "admin"],
     required: true,
   },
   isDeleted: {
