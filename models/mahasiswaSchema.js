@@ -17,10 +17,6 @@ const mahasiswaSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
-    password: {
-      type: String,
-      required: true,
-    },
     isDeleted: {
       type: Boolean,
       default: false,
