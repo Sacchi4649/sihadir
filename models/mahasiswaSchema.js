@@ -15,6 +15,7 @@ const mahasiswaSchema = new mongoose.Schema(
     },
     nim: {
       type: String,
+      required: true,
       unique: true,
     },
     isDeleted: {
