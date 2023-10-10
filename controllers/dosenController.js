@@ -14,8 +14,18 @@ class DosenController {
 
   static async getAllDosen(request, response, next) {
     try {
-      const findDosen = await dosenModel.find();
-      response.status(200).json({ dosen: findDosen });
+      const { limit = 10, offset = 0 } = request.query;
+      const findDosen = await dosenModel
+        .find({ isDeleted: false })
+        .limit(limit)
+        .skip(offset);
+      const count = await dosenModel.count();
+      const pagination = {
+        page: offset ? offset / limit + 1 : 1,
+        per_page: limit * 1,
+        total_data: count,
+      };
+      response.status(200).json({ dosen: findDosen, pagination });
     } catch (error) {
       response.status(500).json({ message: "Internal serer error" });
     }

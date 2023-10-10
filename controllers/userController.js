@@ -48,10 +48,19 @@ class UserController {
 
   static async getAllUser(request, response, next) {
     try {
-      const findUser = await userModel.find({ isDeleted: false });
-      response.status(200).json({ user: findUser });
+      const { limit = 10, offset = 0 } = request.query;
+      const findUser = await userModel
+        .find({ isDeleted: false })
+        .limit(limit)
+        .skip(offset);
+      const count = await userModel.count();
+      const pagination = {
+        page: offset ? offset / limit + 1 : 1,
+        per_page: limit * 1,
+        total_data: count,
+      };
+      response.status(200).json({ user: findUser, pagination });
     } catch (error) {
-      console.log(error);
       response.status(500).json({ message: "Internal server error" });
     }
   }
