@@ -7,6 +7,6 @@ const userRoute = require("./userRoute");
 
 router.use("/mahasiswa", MahasiswaRoute);
 router.use("/dosen", DosenRoute);
-router.use("/", userRoute);
+router.use("/user", userRoute);
 
 module.exports = router;
