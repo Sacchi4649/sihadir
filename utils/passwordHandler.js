@@ -5,7 +5,7 @@ const passwordEncryption = (password) => {
 };
 
 const passwordValidation = (password, encryptedPassword) => {
-  return bcrypt.compare(password, encryptedPassword);
+  return bcrypt.compareSync(password, encryptedPassword);
 };
 
 module.exports = { passwordEncryption, passwordValidation };

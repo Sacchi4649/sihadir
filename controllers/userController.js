@@ -10,15 +10,13 @@ const {
 
 class UserController {
   static async addUser(request, response, next) {
-    const user = new userModel({
-      username: request.body.username,
-      password: passwordEncryption(request.body.password),
-      role: request.body.role,
-    });
-
     try {
-      const username = request.body.username;
-      const role = request.body.role;
+      const { username, password, role } = request.body;
+      const user = new userModel({
+        username,
+        password: passwordEncryption(password),
+        role,
+      });
       const checkAvailaibility = await userModel.findOne({
         username: username,
       });
@@ -37,6 +35,9 @@ class UserController {
           } else {
             response.status(400).json({ message: "Username tidak tersedia" });
           }
+        } else if (role == "admin") {
+          await user.save();
+          response.status(200).json({ user });
         }
       } else {
         response.status(400).json({ message: "Username telah dibuat" });
@@ -46,14 +47,55 @@ class UserController {
     }
   }
 
+  static async login(request, response, next) {
+    try {
+      const { username, password } = request.body;
+
+      const findUsername = await userModel.findOne({ username: username });
+
+      if (findUsername) {
+        if (passwordValidation(password, findUsername.password)) {
+          if (findUsername.role == "mahasiswa") {
+            response.status(200).json({ message: "Login mahasiswa berhasil" });
+          } else if (findUsername.role == "dosen") {
+            response.status(200).json({ message: "Login dosen berhasil" });
+          } else if (findUsername.role == "admin") {
+            response.status(200).json({ message: "Login admin berhasil" });
+          }
+        } else {
+          response.status(400).json({ message: "Username/Password salah!" });
+        }
+      } else {
+        response.status(400).json({ message: "Username/Password salah!" });
+      }
+    } catch (error) {
+      response.status(500).json({ message: "Internal server error" });
+      return;
+    }
+  }
+
   static async getAllUser(request, response, next) {
     try {
-      const { limit = 10, offset = 0 } = request.query;
+      const { limit = 10, offset = 0, search = "" } = request.query;
       const findUser = await userModel
-        .find({ isDeleted: false })
+        .find({
+          $or: [
+            { username: { $regex: new RegExp(search, "i") } },
+            { role: { $regex: new RegExp(search, "i") } },
+          ],
+          isDeleted: false,
+        })
         .limit(limit)
         .skip(offset);
-      const count = await userModel.count();
+      const count = await userModel
+        .find({
+          $or: [
+            { username: { $regex: new RegExp(search, "i") } },
+            { role: { $regex: new RegExp(search, "i") } },
+          ],
+          isDeleted: false,
+        })
+        .count();
       const pagination = {
         page: offset ? offset / limit + 1 : 1,
         per_page: limit * 1,
@@ -75,30 +117,6 @@ class UserController {
       response.status(200).json({ user: findUser });
     } catch (error) {
       response.status(500).json({ message: "Internal server error" });
-    }
-  }
-  static async login(request, response, next) {
-    try {
-      const { username, password } = request.body;
-
-      const findUsername = await userModel.findOne({ username: username });
-
-      if (findUsername) {
-        if (findUsername.password == password) {
-          if (findUsername.role == "mahasiswa") {
-            response.status(200).json({ message: "Login mahasiswa berhasil" });
-          } else if (findUsername.role == "dosen") {
-            response.status(200).json({ message: "Login dosen berhasil" });
-          }
-        } else {
-          response.status(400).json({ message: "Username/Password salah!" });
-        }
-      } else {
-        response.status(400).json({ message: "Username/Password salah!" });
-      }
-    } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
-      return;
     }
   }
 
