@@ -48,17 +48,21 @@ class UserController {
 
   static async getAllUser(request, response, next) {
     try {
-      const findUser = await userModel.find();
+      const findUser = await userModel.find({ isDeleted: false });
       response.status(200).json({ user: findUser });
     } catch (error) {
+      console.log(error);
       response.status(500).json({ message: "Internal server error" });
     }
   }
 
   static async getOneUser(request, response, next) {
     try {
-      const { id } = request.params;
-      const findUser = await userModel.findOne({ _id: id });
+      const { username } = request.params;
+      const findUser = await userModel.findOne({
+        username: username,
+      });
+
       response.status(200).json({ user: findUser });
     } catch (error) {
       response.status(500).json({ message: "Internal server error" });
@@ -72,7 +76,6 @@ class UserController {
 
       if (findUsername) {
         if (findUsername.password == password) {
-          console.log(findUsername);
           if (findUsername.role == "mahasiswa") {
             response.status(200).json({ message: "Login mahasiswa berhasil" });
           } else if (findUsername.role == "dosen") {
@@ -87,6 +90,54 @@ class UserController {
     } catch (error) {
       response.status(500).json({ message: "Internal server error" });
       return;
+    }
+  }
+
+  static async editUser(request, response, next) {
+    try {
+      const { id } = request.params;
+      const { username, role } = request.body;
+      const userId = await userModel.findOne({ _id: id });
+      console.log(userId);
+      if (userId._id == id) {
+        const updateUser = await userModel.findOneAndUpdate(
+          { _id: id },
+          {
+            username,
+            role,
+          },
+          {
+            new: true,
+            upsert: true,
+          }
+        );
+        response.status(200).json({ user: updateUser });
+      }
+    } catch (error) {
+      response.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  static async deleteUser(request, response, next) {
+    try {
+      const { username } = request.params;
+      const user = await userModel.findOne({ username: username });
+
+      if (user.username == username) {
+        const deleteUser = await userModel.findOneAndUpdate(
+          {
+            isDeleted: true,
+          },
+          {
+            new: true,
+            upsert: true,
+          }
+        );
+        response.status(200).json({ user: deleteUser });
+      }
+    } catch (error) {
+      console.log(error);
+      response.status(500).json({ message: "Internal server error" });
     }
   }
 }

@@ -20,6 +20,15 @@ class MahasiswaController {
       response.status(500).json({ message: "Internal server error" });
     }
   }
+  static async getOneMahasiswa(request, response, next) {
+    try {
+      const { id } = request.params;
+      const findMahasiswa = await mahasiswaModel.findOne({ _id: id });
+      response.status(200).json({ mahasiswa: findMahasiswa });
+    } catch (error) {
+      response.status(500).json({ message: "Internal server error" });
+    }
+  }
 }
 
 module.exports = MahasiswaController;

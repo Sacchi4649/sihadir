@@ -20,6 +20,16 @@ class DosenController {
       response.status(500).json({ message: "Internal serer error" });
     }
   }
+
+  static async getOneDosen(request, response, next) {
+    try {
+      const { id } = request.params;
+      const findDosen = await dosenModel.findOne({ _id: id });
+      response.status(200).json({ dosen: findDosen });
+    } catch (error) {
+      response.status(500).json({ message: "Internal server error" });
+    }
+  }
 }
 
 module.exports = DosenController;
