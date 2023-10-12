@@ -3,6 +3,7 @@
 const mahasiswaModel = require("../models/mahasiswaSchema");
 const dosenModel = require("../models/dosenSchema");
 const userModel = require("../models/userSchema");
+const { generateToken, verifyToken } = require("../utils/jwtHandler");
 const {
   passwordEncryption,
   passwordValidation,
@@ -56,11 +57,29 @@ class UserController {
       if (findUsername) {
         if (passwordValidation(password, findUsername.password)) {
           if (findUsername.role == "mahasiswa") {
-            response.status(200).json({ message: "Login mahasiswa berhasil" });
+            response.status(200).json({
+              message: "Login mahasiswa berhasil",
+              token: generateToken({
+                id: findUsername._id,
+                username: findUsername.username,
+              }),
+            });
           } else if (findUsername.role == "dosen") {
-            response.status(200).json({ message: "Login dosen berhasil" });
+            response.status(200).json({
+              message: "Login dosen berhasil",
+              token: generateToken({
+                id: findUsername._id,
+                username: findUsername.username,
+              }),
+            });
           } else if (findUsername.role == "admin") {
-            response.status(200).json({ message: "Login admin berhasil" });
+            response.status(200).json({
+              message: "Login admin berhasil",
+              token: generateToken({
+                id: findUsername._id,
+                username: findUsername.username,
+              }),
+            });
           }
         } else {
           response.status(400).json({ message: "Username/Password salah!" });
