@@ -53,34 +53,18 @@ class UserController {
       const { username, password } = request.body;
 
       const findUsername = await userModel.findOne({ username: username });
-
       if (findUsername) {
         if (passwordValidation(password, findUsername.password)) {
-          if (findUsername.role == "mahasiswa") {
-            response.status(200).json({
-              message: "Login mahasiswa berhasil",
-              token: generateToken({
-                id: findUsername._id,
-                username: findUsername.username,
-              }),
-            });
-          } else if (findUsername.role == "dosen") {
-            response.status(200).json({
-              message: "Login dosen berhasil",
-              token: generateToken({
-                id: findUsername._id,
-                username: findUsername.username,
-              }),
-            });
-          } else if (findUsername.role == "admin") {
-            response.status(200).json({
-              message: "Login admin berhasil",
-              token: generateToken({
-                id: findUsername._id,
-                username: findUsername.username,
-              }),
-            });
-          }
+          response.status(200).json({
+            message: "Login berhasil",
+            token: generateToken({
+              id: findUsername._id,
+              username: findUsername.username,
+              role: findUsername.role,
+            }),
+            username: findUsername.username,
+            role: findUsername.role,
+          });
         } else {
           response.status(400).json({ message: "Username/Password salah!" });
         }
@@ -89,7 +73,6 @@ class UserController {
       }
     } catch (error) {
       response.status(500).json({ message: "Internal server error" });
-      return;
     }
   }
 

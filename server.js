@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const Router = require("./routes");
 const connectdb = require("./database");
+const errorHandling = require("./middlewares/errorHandling");
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 connectdb();
 app.use(express.urlencoded({ extended: true }));
 app.use("/", Router);
+app.use(errorHandling);
 
 app.get("/", (request, response) => {
   console.log("Response success");
