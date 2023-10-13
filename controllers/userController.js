@@ -111,9 +111,10 @@ class UserController {
 
   static async getOneUser(request, response, next) {
     try {
-      const { username } = request.params;
+      const { id } = request.params;
       const findUser = await userModel.findOne({
-        username: username,
+        _id: id,
+        isDeleted: false,
       });
 
       response.status(200).json({ user: findUser });
@@ -126,7 +127,7 @@ class UserController {
     try {
       const { id } = request.params;
       const { username, role } = request.body;
-      const userId = await userModel.findOne({ _id: id });
+      const userId = await userModel.findOne({ _id: id, isDeleted: false });
       console.log(userId);
       if (userId._id == id) {
         const updateUser = await userModel.findOneAndUpdate(
@@ -149,10 +150,10 @@ class UserController {
 
   static async deleteUser(request, response, next) {
     try {
-      const { username } = request.params;
-      const user = await userModel.findOne({ username: username });
+      const { id } = request.params;
+      const user = await userModel.findOne({ _id: id, isDeleted: false });
 
-      if (user.username == username) {
+      if (user._id == id) {
         const deleteUser = await userModel.findOneAndUpdate(
           {
             isDeleted: true,
