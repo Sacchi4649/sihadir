@@ -1,12 +1,14 @@
 "use strict";
 
 const router = require("express").Router();
-const MahasiswaRoute = require("./mahasiswaRoute");
-const DosenRoute = require("./dosenRoute");
+const mahasiswaRoute = require("./mahasiswaRoute");
+const dosenRoute = require("./dosenRoute");
 const userRoute = require("./userRoute");
+const matkulRoute = require("./matkulRoute");
 
-router.use("/mahasiswa", MahasiswaRoute);
-router.use("/dosen", DosenRoute);
+router.use("/mahasiswa", mahasiswaRoute);
+router.use("/dosen", dosenRoute);
 router.use("/user", userRoute);
+router.use("/matakuliah", matkulRoute);
 
 module.exports = router;

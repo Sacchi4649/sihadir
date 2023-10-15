@@ -29,30 +29,29 @@ class UserController {
           message: "Username telah dibuat",
         };
 
-      // if (!checkAvailaibility) {
       if (role == "mahasiswa") {
-        if (await mahasiswaModel.findOne({ nim: username })) {
-          await user.save();
-          response.status(200).json({ user });
-        } else {
-          response.status(400).json({ message: "Username tidak tersedia" });
+        if (!(await mahasiswaModel.findOne({ nim: username }))) {
+          throw {
+            message: "Username tidak tersedia",
+            name: "BadRequestError",
+          };
         }
+        await user.save();
+        response.status(200).json({ user });
       } else if (role == "dosen") {
-        if (await dosenModel.findOne({ nip: user.username })) {
-          await user.save();
-          response.status(200).json({ user });
-        } else {
-          response.status(400).json({ message: "Username tidak tersedia" });
+        if (!(await dosenModel.findOne({ nip: user.username }))) {
+          throw {
+            message: "Username tidak tersedia",
+            name: "BadRequestError",
+          };
         }
+        await user.save();
+        response.status(200).json({ user });
       } else if (role == "admin") {
         await user.save();
         response.status(200).json({ user });
       }
-      // } else {
-      //   response.status(400).json({ message: "Username telah dibuat" });
-      // }
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -161,7 +160,6 @@ class UserController {
 
   static async changePassword(request, response, next) {
     try {
-      console.log(request.body);
       const userId = request.userId;
       const { password } = request.body;
       const updatePassword = await userModel.findOneAndUpdate(
@@ -175,8 +173,6 @@ class UserController {
         }
       );
       response.status(200).json({ message: "Password berhasil diubah!" });
-
-      console.log(updatePassword);
     } catch (error) {
       next(error);
     }

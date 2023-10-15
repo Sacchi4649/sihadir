@@ -1,4 +1,4 @@
-module.exports = (error, _, response) => {
+module.exports = (error, _, response, next) => {
   console.log(error);
   switch (error.name) {
     case "MongoServerError": {
@@ -11,6 +11,9 @@ module.exports = (error, _, response) => {
     case "ConflictError": {
       response.status(409).json({ message: error.message });
       break;
+    }
+    case "BadRequestError": {
+      response.status(400).json({ message: error.message });
     }
     case "JsonWebTokenError": {
       response.status(406).json({ message: error.message });
@@ -29,7 +32,7 @@ module.exports = (error, _, response) => {
       break;
     }
     default: {
-      response.status(500).json({ error });
+      response.status(500).json({ message: "Internal server error" });
     }
   }
 };

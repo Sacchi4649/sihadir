@@ -7,8 +7,13 @@ const matkulSchema = new mongoose.Schema(
       required: true,
     },
     semester: {
-      type: Number,
+      type: String,
       required: true,
+    },
+    isActive: {
+      type: Boolean,
+      required: true,
+      default: true,
     },
   },
   { timestamps: true }
