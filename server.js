@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", Router);
 app.use(errorHandling);
 
-app.get("/", (request, response) => {
+app.get("/", (_, response) => {
   console.log("Response success");
   response.send("SIHADIR Backend response success!");
 });

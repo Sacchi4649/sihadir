@@ -2,6 +2,7 @@ module.exports = async (request, response, next) => {
   const { verifyToken } = require("../utils/jwtHandler");
   const userModel = require("../models/userSchema");
   try {
+    //memeriksa apakah ada authorization(token) apa tidak
     if (!request.headers.authorization) {
       next({ name: "UnauthorizedError", message: "Silahkan login dulu" });
     }
@@ -10,12 +11,12 @@ module.exports = async (request, response, next) => {
     const findUser = await userModel.findOne({ _id: userToken.id });
     const { _id, isActive, isDeleted } = findUser;
     if (userToken.id == _id && isActive && !isDeleted) {
+      request.userId = _id; //request membuat objek baru dengan nama userId yang berisi _id user
       next();
     } else {
       next({ name: "UnauthorizedError", message: "Silahkan login dulu" });
     }
   } catch (error) {
     next(error);
-    // response.status(500).json({ message: "Internal server error" });
   }
 };

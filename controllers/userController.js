@@ -21,30 +21,39 @@ class UserController {
       const checkAvailaibility = await userModel.findOne({
         username: username,
       });
-      if (!checkAvailaibility) {
-        if (role == "mahasiswa") {
-          if (await mahasiswaModel.findOne({ nim: username })) {
-            await user.save();
-            response.status(200).json({ user });
-          } else {
-            response.status(400).json({ message: "Username tidak tersedia" });
-          }
-        } else if (role == "dosen") {
-          if (await dosenModel.findOne({ nip: user.username })) {
-            await user.save();
-            response.status(200).json({ user });
-          } else {
-            response.status(400).json({ message: "Username tidak tersedia" });
-          }
-        } else if (role == "admin") {
+
+      if (checkAvailaibility)
+        // throw langsung melempar ke catch (seperti break)
+        throw {
+          name: "ConflictError",
+          message: "Username telah dibuat",
+        };
+
+      // if (!checkAvailaibility) {
+      if (role == "mahasiswa") {
+        if (await mahasiswaModel.findOne({ nim: username })) {
           await user.save();
           response.status(200).json({ user });
+        } else {
+          response.status(400).json({ message: "Username tidak tersedia" });
         }
-      } else {
-        response.status(400).json({ message: "Username telah dibuat" });
+      } else if (role == "dosen") {
+        if (await dosenModel.findOne({ nip: user.username })) {
+          await user.save();
+          response.status(200).json({ user });
+        } else {
+          response.status(400).json({ message: "Username tidak tersedia" });
+        }
+      } else if (role == "admin") {
+        await user.save();
+        response.status(200).json({ user });
       }
+      // } else {
+      //   response.status(400).json({ message: "Username telah dibuat" });
+      // }
     } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
+      console.log(error);
+      next(error);
     }
   }
 
@@ -72,7 +81,7 @@ class UserController {
         response.status(400).json({ message: "Username/Password salah!" });
       }
     } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   }
 
@@ -104,8 +113,9 @@ class UserController {
         total_data: count,
       };
       response.status(200).json({ user: findUser, pagination });
+      // response.render("user", { findUser, title: "tes user" });
     } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   }
 
@@ -119,22 +129,23 @@ class UserController {
 
       response.status(200).json({ user: findUser });
     } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   }
 
   static async editUser(request, response, next) {
     try {
       const { id } = request.params;
-      const { username, role } = request.body;
+      const { username, role, isActive } = request.body;
       const userId = await userModel.findOne({ _id: id, isDeleted: false });
-      console.log(userId);
+
       if (userId._id == id) {
         const updateUser = await userModel.findOneAndUpdate(
           { _id: id },
           {
             username,
             role,
+            isActive,
           },
           {
             new: true,
@@ -144,7 +155,30 @@ class UserController {
         response.status(200).json({ user: updateUser });
       }
     } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
+      next(error);
+    }
+  }
+
+  static async changePassword(request, response, next) {
+    try {
+      console.log(request.body);
+      const userId = request.userId;
+      const { password } = request.body;
+      const updatePassword = await userModel.findOneAndUpdate(
+        { _id: userId },
+        {
+          password: passwordEncryption(password),
+        },
+        {
+          new: true,
+          upsert: true,
+        }
+      );
+      response.status(200).json({ message: "Password berhasil diubah!" });
+
+      console.log(updatePassword);
+    } catch (error) {
+      next(error);
     }
   }
 
@@ -166,8 +200,7 @@ class UserController {
         response.status(200).json({ user: deleteUser });
       }
     } catch (error) {
-      console.log(error);
-      response.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   }
 }

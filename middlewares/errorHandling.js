@@ -1,30 +1,35 @@
-module.exports = (error, req, res, next) => {
+module.exports = (error, _, response) => {
+  console.log(error);
   switch (error.name) {
     case "MongoServerError": {
-      res.status(400).json({ message: error.message });
+      response.status(400).json({ message: error.message, error });
     }
     case "NotFoundError": {
-      res.status(404).json({ message: error.message });
+      response.status(404).json({ message: error.message });
       break;
     }
     case "ConflictError": {
-      res.status(409).json({ message: error.message });
+      response.status(409).json({ message: error.message });
       break;
     }
     case "JsonWebTokenError": {
-      res.status(406).json({ message: error.message });
+      response.status(406).json({ message: error.message });
       break;
     }
     case "ForbiddenError": {
-      res.status(403).json({ message: error.message });
+      response.status(403).json({ message: error.message });
       break;
     }
     case "UnauthorizedError": {
-      res.status(401).json({ message: error.message });
+      response.status(401).json({ message: error.message });
+      break;
+    }
+    case "ValidationError": {
+      response.status(400).json({ message: error.message });
       break;
     }
     default: {
-      res.status(500).json({ message: "Internal Server Error" });
+      response.status(500).json({ error });
     }
   }
 };
