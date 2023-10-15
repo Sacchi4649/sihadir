@@ -3,13 +3,13 @@ const matkulModel = require("../models/matkulSchema");
 
 class MatkulController {
   static async addMatkul(request, response, next) {
-    const { nama, semester, isActive } = request.body;
-    const matkul = new matkulModel({
-      nama,
-      semester,
-      isActive,
-    });
     try {
+      const { nama, semester, isActive } = request.body;
+      const matkul = new matkulModel({
+        nama,
+        semester,
+        isActive,
+      });
       await matkul.save();
       response.status(200).json({ matkul });
     } catch (error) {
@@ -71,4 +71,3 @@ class MatkulController {
 }
 
 module.exports = MatkulController;
-// add, get all, edit
