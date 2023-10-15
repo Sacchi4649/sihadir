@@ -135,16 +135,20 @@ class UserController {
   static async editUser(request, response, next) {
     try {
       const { id } = request.params;
-      const { username, role, isActive } = request.body;
-      const userId = await userModel.findOne({ _id: id, isDeleted: false });
+      const { username, role, isActive, image } = request.body;
+      const findUser = await userModel.findOne({
+        _id: id,
+        isDeleted: false,
+      });
 
-      if (userId._id == id) {
+      if (findUser._id == id) {
         const updateUser = await userModel.findOneAndUpdate(
           { _id: id },
           {
             username,
             role,
             isActive,
+            image,
           },
           {
             new: true,
@@ -162,7 +166,7 @@ class UserController {
     try {
       const userId = request.userId;
       const { password } = request.body;
-      const updatePassword = await userModel.findOneAndUpdate(
+      await userModel.findOneAndUpdate(
         { _id: userId },
         {
           password: passwordEncryption(password),

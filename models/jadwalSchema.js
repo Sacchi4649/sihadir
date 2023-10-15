@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+mongoose.pluralize(null);
 const jadwalSchema = new mongoose.Schema({
   hari: {
     type: String,
@@ -38,5 +38,5 @@ const jadwalSchema = new mongoose.Schema({
   },
 });
 
-const Jadwal = mongoose.model("Jadwal", jadwalSchema);
+const Jadwal = mongoose.model("jadwal", jadwalSchema);
 module.exports = Jadwal;

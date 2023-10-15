@@ -1,8 +1,8 @@
 const unggah = require("unggah");
 
 const storage = unggah.gcs({
-  keyFilename: "credential key",
-  bucketName: "namabucket",
+  keyFilename: "./serviceaccountkey.json",
+  bucketName: "sihadir-images",
   rename: (req, file) => {
     return `${Date.now()}-${file.originalname}`;
   },

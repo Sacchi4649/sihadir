@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+mongoose.pluralize(null);
 const matkulSchema = new mongoose.Schema(
   {
     nama: {
@@ -19,6 +19,6 @@ const matkulSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const mataKuliah = mongoose.model(null, matkulSchema, "mata_kuliah");
+const mataKuliah = mongoose.model("mata_kuliah", matkulSchema);
 
 module.exports = mataKuliah;

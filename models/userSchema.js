@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+mongoose.pluralize(null);
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ["mahasiswa", "dosen", "admin"],
     required: true,
+  },
+  image: {
+    type: String,
+    default: "",
   },
   isActive: {
     type: Boolean,
