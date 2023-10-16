@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-mongoose.pluralize(null);
+
 const connectdb = () => {
   mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,

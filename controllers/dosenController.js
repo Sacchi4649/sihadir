@@ -40,6 +40,36 @@ class DosenController {
       response.status(500).json({ message: "Internal server error" });
     }
   }
+
+  static async editDosen(request, response, next) {
+    try {
+      const { id } = request.params;
+      const { nama, gender, nip, image } = request.body;
+      const findDosen = await dosenModel.findOne({
+        _id: id,
+        isDeleted: false,
+      });
+
+      if (findDosen._id == id) {
+        const updateDosen = await dosenModel.findOneAndUpdate(
+          { _id: id },
+          {
+            nama,
+            gender,
+            nip,
+            image,
+          },
+          {
+            new: true,
+            upsert: true,
+          }
+        );
+        response.status(200).json({ dosen: updateDosen });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = DosenController;

@@ -39,6 +39,36 @@ class MahasiswaController {
       response.status(500).json({ message: "Internal server error" });
     }
   }
+
+  static async editMahasiswa(request, response, next) {
+    try {
+      const { id } = request.params;
+      const { nama, gender, nim, image } = request.body;
+      const findMahasiswa = await mahasiswaModel.findOne({
+        _id: id,
+        isDeleted: false,
+      });
+
+      if (findMahasiswa._id == id) {
+        const updateMahasiswa = await mahasiswaModel.findOneAndUpdate(
+          { _id: id },
+          {
+            nama,
+            gender,
+            nim,
+            image,
+          },
+          {
+            new: true,
+            upsert: true,
+          }
+        );
+        response.status(200).json({ mahasiswa: updateMahasiswa });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = MahasiswaController;
