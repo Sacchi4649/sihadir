@@ -22,6 +22,10 @@ const jadwalSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  semester: {
+    type: String,
+    required: true,
+  },
   tahun: {
     type: String,
     required: true,

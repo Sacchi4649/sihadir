@@ -8,7 +8,7 @@ const presensiSchema = new mongoose.Schema(
       default: "alpha",
     },
     waktu_presensi: {
-      tye: String,
+      type: String,
       required: true,
     },
     dosen: {
@@ -19,9 +19,48 @@ const presensiSchema = new mongoose.Schema(
     mahasiswa: {
       id: { type: String },
       nama: { type: String },
-      nip: { type: String },
+      nim: { type: String },
     },
-    image: {
+
+    jadwal: {
+      id: { type: String, required: true },
+      hari: {
+        type: String,
+        enum: ["senin", "selasa", "rabu", "kamis", "jumat"],
+        required: true,
+      },
+      jam_mulai: {
+        type: String,
+        required: true,
+      },
+      jam_selesai: {
+        type: String,
+        required: true,
+      },
+      ruang: {
+        type: String,
+        required: true,
+      },
+      kelas: {
+        type: String,
+        required: true,
+      },
+      tahun: {
+        type: String,
+        required: true,
+      },
+      dosen: {
+        id: { type: String, required: true },
+        nama: { type: String, required: true },
+        nip: { type: String, required: true },
+      },
+      matakuliah: {
+        id: { type: String, required: true },
+        nama: { type: String, required: true },
+        semester: { type: String, required: true },
+      },
+    },
+    surat: {
       type: String,
       default: "",
     },

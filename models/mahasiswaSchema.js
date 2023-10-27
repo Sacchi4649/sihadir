@@ -14,8 +14,25 @@ const mahasiswaSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    kelas: {
+      type: String,
+      enum: ["a", "b", "c", "d", "e", "ic"],
+      required: true,
+    },
+    semester: {
+      type: String,
+      required: true,
+    },
     image: {
       type: String,
+      default: "",
+    },
+    kompensasi: {
+      type: Number,
+    },
+    status_sp: {
+      type: String,
+      enum: ["sp1", "sp2", "sp3", "do", ""],
       default: "",
     },
     isDeleted: {

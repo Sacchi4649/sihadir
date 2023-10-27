@@ -43,7 +43,7 @@ class MahasiswaController {
   static async editMahasiswa(request, response, next) {
     try {
       const { id } = request.params;
-      const { nama, gender, nim, image } = request.body;
+      const { nama, gender, nim, kelas, semester, image } = request.body;
       const findMahasiswa = await mahasiswaModel.findOne({
         _id: id,
         isDeleted: false,
@@ -56,6 +56,8 @@ class MahasiswaController {
             nama,
             gender,
             nim,
+            kelas,
+            semester,
             image,
           },
           {
