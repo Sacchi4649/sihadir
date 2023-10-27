@@ -26,6 +26,62 @@ class presensiController {
       next(error);
     }
   }
+
+  static async isiPresensi(request, response, next) {
+    try {
+      const { id } = request.params;
+      const { status } = request.body;
+      const userRole = request.userRole;
+      const findPresensi = await presensiModel.findOne({
+        _id: id,
+      });
+      if (userRole) {
+        if (findPresensi._id == id) {
+          const updatePresensi = await presensiModel.findOneAndUpdate(
+            { _id: id },
+            {
+              status,
+            },
+            {
+              new: true,
+              upsert: true,
+            }
+          );
+          response.status(200).json({ presensi: updatePresensi });
+        }
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async koreksiPresensi(request, response, next) {
+    try {
+      const { id } = request.params;
+      const { status } = request.body;
+      const findPresensi = await presensiModel.findOne({
+        _id: id,
+      });
+      if (!status == "hadir") {
+        if (findPresensi._id == id) {
+          const updatePresensi = await presensiModel.findOneAndUpdate(
+            { _id: id },
+            {
+              status,
+              image,
+            },
+            {
+              new: true,
+              upsert: true,
+            }
+          );
+          response.status(200).json({ presensi: updatePresensi });
+        }
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = presensiController;

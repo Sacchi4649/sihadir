@@ -5,6 +5,7 @@ const presensiSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["hadir", "sakit", "izin", "alpha"],
+      default: "alpha",
     },
     waktu_presensi: {
       tye: String,
@@ -19,6 +20,10 @@ const presensiSchema = new mongoose.Schema(
       id: { type: String },
       nama: { type: String },
       nip: { type: String },
+    },
+    image: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }
