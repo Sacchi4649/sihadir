@@ -29,6 +29,11 @@ const mahasiswaSchema = new mongoose.Schema(
     },
     kompensasi: {
       type: Number,
+      default: 0,
+    },
+    total_alpha: {
+      type: Number,
+      default: 0,
     },
     status_sp: {
       type: String,

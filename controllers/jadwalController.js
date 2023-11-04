@@ -11,6 +11,7 @@ class JadwalController {
         hari,
         jam_mulai,
         jam_selesai,
+        slot,
         ruang,
         kelas,
         semester,
@@ -18,7 +19,6 @@ class JadwalController {
         idDosen,
         idMatakuliah,
       } = request.body;
-
       const dosen = await dosenModel.findOne({ _id: idDosen });
       const matakuliah = await matkulModel.findOne({ _id: idMatakuliah });
 
@@ -26,6 +26,7 @@ class JadwalController {
         hari,
         jam_mulai,
         jam_selesai,
+        slot,
         ruang,
         kelas,
         semester,
@@ -86,6 +87,7 @@ class JadwalController {
         hari,
         jam_mulai,
         jam_selesai,
+        slot,
         ruang,
         kelas,
         semester,
@@ -104,6 +106,7 @@ class JadwalController {
             hari,
             jam_mulai,
             jam_selesai,
+            slot,
             ruang,
             kelas,
             semester,

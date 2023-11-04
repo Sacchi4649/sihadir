@@ -14,6 +14,8 @@ module.exports = getHari = (number) => {
       return "jumat";
     case 6:
       return "sabtu";
+    case 7:
+      return "minggu";
     default:
       break;
   }
