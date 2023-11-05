@@ -16,13 +16,21 @@ class presensiController {
       const userUsername = request.userUsername;
       const query = {
         $or: [{ status: { $regex: new RegExp(search, "i") } }],
-        // nim: userUsername,
       };
+
       if (userRole == "mahasiswa") {
         query.nim = userUsername;
+      } else if (userRole == "dosen") {
+        query.nip = JSON.parse(userUsername);
       }
+      // console.log(userUsername);
+      console.log(query);
+      console.log(query.nim);
+      // const findMahasiswa = await mahasiswaModel.findOne({ nim: userUsername });
+
       const findPresensi = await presensiModel
         .find(query)
+
         .limit(limit)
         .skip(offset);
       const count = await presensiModel
@@ -45,15 +53,14 @@ class presensiController {
     try {
       const { idJadwal } = request.body;
       const userRole = request.userRole;
-      const userId = request.userId;
       const userUsername = request.userUsername;
       const findMahasiswa = await mahasiswaModel.findOne({ nim: userUsername });
       const findJadwal = await jadwalModel.findOne({ _id: idJadwal });
       const date = new Date();
       const day = getHari(date.getDay());
-      const hour = `${date.getHours() < 10 ? "0" : ""}:${
-        (date.getMinutes() < 10 ? "0" : "") + date.getMinutes()
-      }`;
+      const hour = `${
+        date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
+      }:${(date.getMinutes() < 10 ? "0" : "") + date.getMinutes()}`;
       // date.getHours() + ":" + date.getMinutes();
       let telat = -1,
         slotJadwal;
@@ -77,7 +84,7 @@ class presensiController {
         matakuliah,
         surat,
       } = findJadwal;
-
+      console.log(hour);
       if (!(semester == findMahasiswa.semester && kelas == findMahasiswa.kelas))
         throw { message: "Tidak ada kelas", name: "BadRequestError" };
       console.log(hour, jam_mulai);
@@ -94,8 +101,9 @@ class presensiController {
           break;
         }
       }
+      let alpha = telat;
       const hitungStatus = findMahasiswa.total_alpha + telat;
-      const hitungKompen = kompensasiCounter(telat);
+      const hitungKompen = kompensasiCounter(alpha);
       const kompen = findMahasiswa.kompensasi + hitungKompen;
       const checkStatus = statusCounter(hitungStatus);
       console.log(kompen, hitungStatus, checkStatus);

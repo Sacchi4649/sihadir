@@ -4,7 +4,7 @@ const router = require("express").Router();
 const PresensiController = require("../controllers/presensiController");
 const authentication = require("../middlewares/authentication");
 
-router.get("/", PresensiController.getPresensi);
+router.get("/", authentication, PresensiController.getPresensi);
 router.post("/", authentication, PresensiController.isiPresensi);
 // router.patch("/:id", PresensiController.editPresensi);
 
