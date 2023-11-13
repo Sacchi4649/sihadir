@@ -29,7 +29,7 @@ const presensiSchema = new mongoose.Schema(
       id: { type: String, required: true },
       hari: {
         type: String,
-        enum: ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu"],
+        enum: ["senin", "selasa", "rabu", "kamis", "jumat"],
         required: true,
       },
       jam_mulai: {
@@ -42,11 +42,11 @@ const presensiSchema = new mongoose.Schema(
       },
       slotJadwal: {
         type: Number,
-        required: true,
+        required: false,
       },
       waktuSlot: {
-        type: String,
-        required: true,
+        type: Object,
+        required: false,
       },
       ruang: {
         type: String,
@@ -60,7 +60,7 @@ const presensiSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
-      dosen: {
+      dosen_pengampu: {
         id: { type: String, required: true },
         nama: { type: String, required: true },
         nip: { type: String, required: true },

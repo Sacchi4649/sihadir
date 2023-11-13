@@ -31,7 +31,7 @@ class JadwalController {
         kelas,
         semester,
         tahun,
-        dosen: { id: dosen._id, nama: dosen.nama, nip: dosen.nip },
+        dosen_pengampu: { id: dosen._id, nama: dosen.nama, nip: dosen.nip },
         matakuliah: {
           id: matakuliah._id,
           nama: matakuliah.nama,
@@ -111,7 +111,7 @@ class JadwalController {
             kelas,
             semester,
             tahun,
-            dosen: { id: dosen._id, nama: dosen.nama, nip: dosen.nip },
+            dosen_pengampu: { id: dosen._id, nama: dosen.nama, nip: dosen.nip },
             matakuliah: {
               id: matakuliah._id,
               nama: matakuliah.nama,
