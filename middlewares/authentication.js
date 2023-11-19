@@ -1,4 +1,4 @@
-module.exports = async (request, response, next) => {
+module.exports = async (request, _, next) => {
   const { verifyToken } = require("../utils/jwtHandler");
   const userModel = require("../models/userSchema");
   try {
@@ -6,6 +6,7 @@ module.exports = async (request, response, next) => {
     if (!request.headers.authorization) {
       next({ name: "UnauthorizedError", message: "Silahkan login dulu" });
     }
+
     const token = request.headers.authorization.replace("Bearer ", "");
     const userToken = verifyToken(token);
     const findUser = await userModel.findOne({ _id: userToken.id });

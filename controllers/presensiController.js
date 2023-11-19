@@ -164,12 +164,6 @@ class presensiController {
         surat: "",
       });
 
-      console.log("Kompensasi didapat " + hitungKompen);
-      console.log("Total kompensasi " + kompen);
-      console.log("Alpha didapat " + telat);
-      console.log("Total alpha " + hitungStatus);
-      console.log("Status SP " + checkStatus);
-
       await presensi.save();
 
       response.status(200).json({ presensi: presensi });
@@ -328,64 +322,16 @@ class presensiController {
 
   static async isiPresensiDosen(request, response, next) {
     try {
-      const { idJadwal } = request.body;
-      const userRole = request.userRole;
       const userUsername = request.userUsername;
       const findDosen = await dosenModel.findOne({ nip: userUsername });
-      const findJadwal = await jadwalModel.findOne({ _id: idJadwal });
       const date = new Date();
-      const day = getHari(date.getDay());
       const hour = `${
         date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
       }:${(date.getMinutes() < 10 ? "0" : "") + date.getMinutes()}`;
       // date.getHours() + ":" + date.getMinutes();
-      let slotJadwal;
 
-      if (!(userRole != "admin"))
-        throw {
-          message: "Role admin tidak bisa presensi!",
-          name: "ForbiddenError",
-        };
-      const {
-        _id,
-        hari,
-        jam_mulai,
-        jam_selesai,
-        slot,
-        ruang,
-        semester,
-        kelas,
-        tahun,
-        dosen_pengampu,
-        matakuliah,
-        surat,
-      } = findJadwal;
-
-      if (!(semester == findMahasiswa.semester && kelas == findMahasiswa.kelas))
-        throw { message: "Tidak ada kelas", name: "BadRequestError" };
-
-      if (!(hari == day && hour >= jam_mulai && hour <= jam_selesai))
-        throw { message: "Tidak ada jadwal", name: "BadRequestError" };
-
-      if (
-        (hour >= "09:30" && hour <= "09:45") ||
-        (hour >= "12:15" && hour <= "13:00") ||
-        (hour >= "14:40" && hour < "15:30")
-      )
-        throw {
-          message: "Tidak dapat melakukan presensi saat jam istirahat",
-          name: "BadRequestError",
-        };
-
-      for (const key in findJadwal.slot) {
-        if (
-          hour >= findJadwal.slot[key].mulai &&
-          hour <= findJadwal.slot[key].selesai
-        ) {
-          slotJadwal = key;
-          break;
-        }
-      }
+      if (!(hour >= "07:00" && hour <= "17:00"))
+        throw { message: "Tidak ada jam kerja", name: "BadRequestError" };
 
       const presensi = new presensiModel({
         status: "hadir",
@@ -402,23 +348,6 @@ class presensiController {
           nama: findDosen.nama,
           nip: findDosen.nip,
         },
-
-        jadwal: {
-          id: _id,
-          hari,
-          jam_mulai,
-          jam_selesai,
-          slotJadwal: slotJadwal,
-          waktuSlot: findJadwal.slot[slotJadwal],
-          ruang,
-          semester,
-          kelas,
-          tahun,
-          dosen_pengampu,
-          matakuliah,
-          surat,
-        },
-        surat: "",
       });
 
       await presensi.save();

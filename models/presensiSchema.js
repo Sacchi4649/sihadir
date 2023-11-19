@@ -24,7 +24,6 @@ const presensiSchema = new mongoose.Schema(
       alpha_didapat: { type: Number },
       status_sp: { type: String },
     },
-
     jadwal: {
       id: { type: String, required: true },
       hari: {
