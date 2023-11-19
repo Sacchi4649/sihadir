@@ -13,7 +13,7 @@ router.get(
   MahasiswaController.getAllMahasiswa
 );
 router.get(
-  "/:id",
+  "/:username",
   authentication,
   authorization,
   MahasiswaController.getOneMahasiswa
