@@ -5,9 +5,9 @@
 </p>
 Repository ini adalah backend untuk project SIHADIR yang dikerjakan untuk memenuhi tugas mata kuliah PBL (Project Based Learning).
 
-Kelompok 2
+Team 2
 
-## Anggota Kelompok
+## Team Members
 
 |          Nama           |    NIM     |
 | :---------------------: | :--------: |
