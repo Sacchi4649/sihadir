@@ -1,7 +1,7 @@
 # <h1>SIHADIR</h1>
 
-<p align="center">
-  <img src="https://drive.google.com/file/d/1yYm1uodmTEEwuara-nEY1C7XvmeLiZih/view?usp=sharing">
+<p align="center">Si_Hadir_1.png
+  <img src="https://github.com/Sacchi4649/sihadir-backend/blob/master/Si_Hadir_1.png">
 </p>
 Repository ini adalah backend untuk project SIHADIR yang dikerjakan untuk memenuhi tugas mata kuliah PBL (Project Based Learning).
 
@@ -19,9 +19,9 @@ Kelompok 2
 
 ## Tools
 
-| Tools           |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
- ![image](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![image](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white) ![image](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white) |
+| Tools                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![image](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![image](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white) ![image](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white) |
 
 ## API Documentation
 
