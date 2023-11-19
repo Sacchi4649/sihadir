@@ -323,16 +323,23 @@ class presensiController {
   static async isiPresensiDosen(request, response, next) {
     try {
       const userUsername = request.userUsername;
-      const findDosen = await dosenModel.findOne({ nip: userUsername });
+      const userRole = request.userRole;
       const date = new Date();
       const hour = `${
         date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
       }:${(date.getMinutes() < 10 ? "0" : "") + date.getMinutes()}`;
       // date.getHours() + ":" + date.getMinutes();
 
+      if (userRole == "admin" || userRole == "mahasiswa")
+        throw {
+          message: "TIdak ada izin akses",
+          name: "ForbiddenError",
+        };
+
       if (!(hour >= "07:00" && hour <= "17:00"))
         throw { message: "Tidak ada jam kerja", name: "BadRequestError" };
 
+      const findDosen = await dosenModel.findOne({ nip: userUsername });
       const presensi = new presensiModel({
         status: "hadir",
         waktu_presensi:

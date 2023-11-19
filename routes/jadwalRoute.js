@@ -10,4 +10,3 @@ router.get("/", authentication, authorization, JadwalController.getAllJadwal);
 router.put("/:id", JadwalController.editJadwal);
 
 module.exports = router;
-tg;

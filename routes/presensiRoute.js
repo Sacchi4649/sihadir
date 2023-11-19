@@ -21,5 +21,10 @@ router.put(
   upload.single("surat"),
   PresensiController.koreksiPresensi
 );
-router.post("/dosen", authentication, PresensiController.isiPresensiDosen);
+router.post(
+  "/dosen",
+  authentication,
+  authorization,
+  PresensiController.isiPresensiDosen
+);
 module.exports = router;

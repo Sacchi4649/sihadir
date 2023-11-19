@@ -25,19 +25,16 @@ const presensiSchema = new mongoose.Schema(
       status_sp: { type: String },
     },
     jadwal: {
-      id: { type: String, required: true },
+      id: { type: String },
       hari: {
         type: String,
         enum: ["senin", "selasa", "rabu", "kamis", "jumat"],
-        required: true,
       },
       jam_mulai: {
         type: String,
-        required: true,
       },
       jam_selesai: {
         type: String,
-        required: true,
       },
       slotJadwal: {
         type: Number,
@@ -49,25 +46,22 @@ const presensiSchema = new mongoose.Schema(
       },
       ruang: {
         type: String,
-        required: true,
       },
       kelas: {
         type: String,
-        required: true,
       },
       tahun: {
         type: String,
-        required: true,
       },
       dosen_pengampu: {
-        id: { type: String, required: true },
-        nama: { type: String, required: true },
-        nip: { type: String, required: true },
+        id: { type: String },
+        nama: { type: String },
+        nip: { type: String },
       },
       matakuliah: {
-        id: { type: String, required: true },
-        nama: { type: String, required: true },
-        semester: { type: String, required: true },
+        id: { type: String },
+        nama: { type: String },
+        semester: { type: String },
       },
     },
     surat: {
