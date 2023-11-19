@@ -1,7 +1,7 @@
 # <h1>SIHADIR</h1>
 
-<p align="center">Si_Hadir_1.png
-  <img src="https://github.com/Sacchi4649/sihadir-backend/blob/master/Si_Hadir_1.png">
+<p align="center">
+  <img src="https://github.com/Sacchi4649/sihadir-backend/blob/master/logo_SIHADIR.png" >
 </p>
 Repository ini adalah backend untuk project SIHADIR yang dikerjakan untuk memenuhi tugas mata kuliah PBL (Project Based Learning).
 
@@ -34,7 +34,9 @@ https://sihadir-backend-dot-sihadir-401613.et.r.appspot.com
 ## .env
 
 DATABASE=credential_mongodb
+
 PORT=
+
 SECRET_KEY=(untuk authentication, isi bebas)
 
 ## Catatan
