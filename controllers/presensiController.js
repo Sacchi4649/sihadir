@@ -330,6 +330,24 @@ class presensiController {
       }:${(date.getMinutes() < 10 ? "0" : "") + date.getMinutes()}`;
       // date.getHours() + ":" + date.getMinutes();
 
+      const findPresensi = await presensiModel.find({
+        waktu_presensi: {
+          $regex:
+            date.getDate() +
+            "-" +
+            (date.getMonth() + 1) +
+            "-" +
+            date.getFullYear() +
+            ".*",
+        },
+      });
+
+      if (findPresensi) {
+        throw {
+          message: "Anda sudah presensi hari ini",
+          name: "BadRequestError",
+        };
+      }
       if (userRole == "admin" || userRole == "mahasiswa")
         throw {
           message: "TIdak ada izin akses",
