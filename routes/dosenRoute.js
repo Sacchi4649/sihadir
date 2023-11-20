@@ -7,7 +7,12 @@ const authentication = require("../middlewares/authentication");
 const authorizationAdmin = require("../middlewares/authorizationAdmin");
 
 router.post("/", authentication, authorizationAdmin, DosenController.addDosen);
-router.get("/", authentication, DosenController.getAllDosen);
+router.get(
+  "/",
+  authentication,
+  authorizationAdmin,
+  DosenController.getAllDosen
+);
 router.get(
   "/:id",
   authentication,
@@ -20,6 +25,13 @@ router.put(
   authorizationAdmin,
   upload.single("image"),
   DosenController.editDosen
+);
+
+router.patch(
+  "/delete-dosen",
+  authentication,
+  authorizationAdmin,
+  DosenController.deleteDosen
 );
 
 module.exports = router;

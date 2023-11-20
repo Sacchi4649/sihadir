@@ -12,7 +12,7 @@ router.post(
   "/mahasiswa",
   authentication,
   authorizationMahasiswa,
-  PresensiController.isiPresensi
+  PresensiController.isiPresensiMahasiswa
 );
 router.post(
   "/alpha",

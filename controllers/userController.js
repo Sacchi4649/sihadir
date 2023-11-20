@@ -184,11 +184,12 @@ class UserController {
 
   static async deleteUser(request, response, next) {
     try {
-      const { id } = request.params;
-      const user = await userModel.findOne({ _id: id, isDeleted: false });
+      const { idUser } = request.body;
+      const user = await userModel.findOne({ _id: idUser, isDeleted: false });
 
-      if (user._id == id) {
+      if (user._id == idUser) {
         const deleteUser = await userModel.findOneAndUpdate(
+          { _id: idUser },
           {
             isDeleted: true,
           },

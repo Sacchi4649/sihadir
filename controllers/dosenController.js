@@ -8,7 +8,7 @@ class DosenController {
       await dosen.save();
       response.status(200).json({ dosen });
     } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   }
 
@@ -27,7 +27,7 @@ class DosenController {
       };
       response.status(200).json({ dosen: findDosen, pagination });
     } catch (error) {
-      response.status(500).json({ message: "Internal serer error" });
+      next(error);
     }
   }
 
@@ -37,7 +37,7 @@ class DosenController {
       const findDosen = await dosenModel.findOne({ _id: id });
       response.status(200).json({ dosen: findDosen });
     } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   }
 
@@ -65,6 +65,32 @@ class DosenController {
           }
         );
         response.status(200).json({ dosen: updateDosen });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async deleteDosen(request, response, next) {
+    try {
+      const { idDosen } = request.body;
+      const dosen = await dosenModel.findOne({
+        _id: idDosen,
+        isDeleted: false,
+      });
+
+      if (dosen._id == idDosen) {
+        const deleteDosen = await dosenModel.findOneAndUpdate(
+          { _id: idDosen },
+          {
+            isDeleted: true,
+          },
+          {
+            new: true,
+            upsert: true,
+          }
+        );
+        response.status(200).json({ dosen: deleteDosen });
       }
     } catch (error) {
       next(error);

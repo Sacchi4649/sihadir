@@ -8,7 +8,7 @@ class MahasiswaController {
       await mahasiswa.save();
       response.status(200).json({ mahasiswa });
     } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   }
 
@@ -27,7 +27,7 @@ class MahasiswaController {
       };
       response.status(200).json({ mahasiswa: findMahasiswa, pagination });
     } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   }
   static async getOneMahasiswa(request, response, next) {
@@ -38,7 +38,7 @@ class MahasiswaController {
       });
       response.status(200).json({ mahasiswa: findMahasiswa });
     } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   }
 
@@ -50,7 +50,7 @@ class MahasiswaController {
       });
       response.status(200).json({ mahasiswa: findMahasiswa });
     } catch (error) {
-      response.status(500).json({ message: "Internal server error" });
+      next(error);
     }
   }
 
@@ -85,11 +85,31 @@ class MahasiswaController {
       next(error);
     }
   }
+  static async deleteMahasiswa(request, response, next) {
+    try {
+      const { idMahasiswa } = request.body;
+      const mahasiswa = await mahasiswaModel.findOne({
+        _id: idMahasiswa,
+        isDeleted: false,
+      });
+
+      if (mahasiswa._id == idMahasiswa) {
+        const deleteMahasiswa = await mahasiswaModel.findOneAndUpdate(
+          { _id: idMahasiswa },
+          {
+            isDeleted: true,
+          },
+          {
+            new: true,
+            upsert: true,
+          }
+        );
+        response.status(200).json({ mahasiswa: deleteMahasiswa });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = MahasiswaController;
-// create;
-// edit;
-// selectAll;
-// Selectone;
-// delete flagging;

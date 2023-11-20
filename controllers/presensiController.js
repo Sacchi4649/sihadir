@@ -12,6 +12,7 @@ const timezone = require("dayjs/plugin/timezone");
 const dayjs = require("dayjs");
 dayjs.extend(utc);
 dayjs.extend(timezone);
+const _ = require("lodash");
 
 class presensiController {
   static async getPresensi(request, response, next) {
@@ -45,21 +46,20 @@ class presensiController {
     }
   }
 
-  static async isiPresensi(request, response, next) {
+  static async isiPresensiMahasiswa(request, response, next) {
     try {
       const { idJadwal } = request.body;
       const userRole = request.userRole;
       const userUsername = request.userUsername;
       const findMahasiswa = await mahasiswaModel.findOne({ nim: userUsername });
       const findJadwal = await jadwalModel.findOne({ _id: idJadwal });
-      // const date = new Date(dayjs.tz(dayjs(), "Asia/Jakarta").format());
-      const date = new Date();
-      const day = getHari(date.getDay());
-      console.log(dayjs.tz("Asia/Jakarta").format());
-      const hour = `${
-        date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
-      }:${(date.getMinutes() < 10 ? "0" : "") + date.getMinutes()}`;
-      // date.getHours() + ":" + date.getMinutes();
+      const dateFormat = dayjs
+        .tz(dayjs(), "Asia/Jakarta")
+        .format("YYYY-MM-DD hh:mm");
+      const day = getHari(dayjs.tz(dayjs(), "Asia/Jakarta").day());
+      const hour = dayjs.tz(dayjs(), "Asia/Jakarta").format("hh:mm");
+      console.log(dayjs.tz(dayjs(), "Asia/Jakarta").day()); //1995-12-17T03:24:00
+
       let telat = -1,
         slotJadwal;
 
@@ -69,23 +69,6 @@ class presensiController {
           name: "ForbiddenError",
         };
 
-      // const cekPresensi = await presensiModel.find({
-      //   waktu_presensi: {
-      //     $regex:
-      //       date.getDate() +
-      //       "-" +
-      //       (date.getMonth() + 1) +
-      //       "-" +
-      //       date.getFullYear(),
-      //   },
-      // });
-      // console.log(cekPresensi);
-      // if (cekPresensi) {
-      //   throw {
-      //     message: "Anda sudah presensi hari ini",
-      //     name: "BadRequestError",
-      //   };
-      // }
       const {
         _id,
         hari,
@@ -154,14 +137,7 @@ class presensiController {
 
       const presensi = new presensiModel({
         status: "hadir",
-        waktu_presensi:
-          date.getDate() +
-          "-" +
-          (date.getMonth() + 1) +
-          "-" +
-          date.getFullYear() +
-          " " +
-          hour, //dd-mm-yyyy jam:menit
+        waktu_presensi: dateFormat,
         mahasiswa: {
           id: findMahasiswa._id,
           nama: findMahasiswa.nama,
@@ -204,10 +180,11 @@ class presensiController {
       const findMahasiswa = await mahasiswaModel.findOne({ _id: idMahasiswa });
       const findJadwal = await jadwalModel.findOne({ _id: idJadwal });
       const date = new Date();
-      const day = getHari(date.getDay());
-      const hour = `${
-        date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
-      }:${(date.getMinutes() < 10 ? "0" : "") + date.getMinutes()}`;
+      const dateFormat = dayjs
+        .tz(dayjs(), "Asia/Jakarta")
+        .format("YYYY-MM-DD hh:mm");
+      const day = getHari(dayjs.tz(dayjs(), "Asia/Jakarta").day());
+      const hour = dayjs.tz(dayjs(), "Asia/Jakarta").format("hh:mm");
       // date.getHours() + ":" + date.getMinutes();
       let telat = -1,
         slotJadwal;
@@ -235,26 +212,9 @@ class presensiController {
       if (!(semester == findMahasiswa.semester && kelas == findMahasiswa.kelas))
         throw { message: "Tidak ada kelas", name: "BadRequestError" };
 
-      if (!(hari == day && hour >= jam_mulai && hour <= jam_selesai))
-        throw { message: "Tidak ada jadwal", name: "BadRequestError" };
-
-      if (
-        (hour >= "09:30" && hour <= "09:45") ||
-        (hour >= "12:15" && hour <= "13:00") ||
-        (hour >= "14:40" && hour < "15:30")
-      )
+      if (!(hari == day && hour > jam_selesai))
         throw {
-          message: "Tidak dapat melakukan presensi saat jam istirahat",
-          name: "BadRequestError",
-        };
-
-      if (
-        (hour >= "09:30" && hour <= "09:45") ||
-        (hour >= "12:15" && hour <= "13:00") ||
-        (hour >= "14:40" && hour < "15:30")
-      )
-        throw {
-          message: "Tidak dapat melakukan presensi saat jam istirahat",
+          message: "Mata kuliah masih berlangsung!",
           name: "BadRequestError",
         };
 
@@ -296,14 +256,7 @@ class presensiController {
 
       const presensi = new presensiModel({
         status: "alpha",
-        waktu_presensi:
-          date.getDate() +
-          "-" +
-          (date.getMonth() + 1) +
-          "-" +
-          date.getFullYear() +
-          " " +
-          hour, //dd-mm-yyyy jam:menit
+        waktu_presensi: dateFormat,
         mahasiswa: {
           id: findMahasiswa._id,
           nama: findMahasiswa.nama,
@@ -330,12 +283,6 @@ class presensiController {
         },
         surat: "",
       });
-      console.log(presensi);
-      console.log("Kompensasi didapat " + hitungKompen);
-      console.log("Total kompensasi " + kompen);
-      console.log("Alpha didapat " + telat);
-      console.log("Total alpha " + hitungStatus);
-      console.log("Status SP " + checkStatus);
 
       await presensi.save();
 
@@ -349,49 +296,43 @@ class presensiController {
     try {
       const userUsername = request.userUsername;
       const userRole = request.userRole;
-      const date = new Date();
-      const hour = `${
-        date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
-      }:${(date.getMinutes() < 10 ? "0" : "") + date.getMinutes()}`;
+      const dateFormat = dayjs
+        .tz(dayjs(), "Asia/Jakarta")
+        .format("YYYY-MM-DD hh:mm");
+      const day = getHari(dayjs.tz(dayjs(), "Asia/Jakarta").day());
+      const hour = dayjs.tz(dayjs(), "Asia/Jakarta").format("hh:mm");
       // date.getHours() + ":" + date.getMinutes();
 
-      // const findPresensi = await presensiModel.find({
-      //   waktu_presensi: {
-      //     $regex:
-      //       date.getDate() +
-      //       "-" +
-      //       (date.getMonth() + 1) +
-      //       "-" +
-      //       date.getFullYear(),
-      //   },
-      // });
-
-      // if (findPresensi) {
-      //   throw {
-      //     message: "Anda sudah presensi hari ini",
-      //     name: "BadRequestError",
-      //   };
-      // }
       if (userRole == "admin" || userRole == "mahasiswa")
         throw {
           message: "Tidak ada izin akses",
           name: "ForbiddenError",
         };
 
-      if (!(hour >= "07:00" && hour <= "17:00"))
+      const findPresensi = await presensiModel
+        .find({
+          waktu_presensi: {
+            $regex:
+              dayjs.tz(dayjs(), "Asia/Jakarta").format("YYYY-MM-DD") + ".*",
+          },
+        })
+        .where("dosen.nip")
+        .equals(userUsername);
+
+      if (!_.isEmpty(findPresensi)) {
+        throw {
+          message: "Anda sudah presensi hari ini",
+          name: "BadRequestError",
+        };
+      }
+
+      if (!(hour >= "02:00" && hour <= "17:00"))
         throw { message: "Tidak ada jam kerja", name: "BadRequestError" };
 
       const findDosen = await dosenModel.findOne({ nip: userUsername });
       const presensi = new presensiModel({
         status: "hadir",
-        waktu_presensi:
-          date.getDate() +
-          "-" +
-          (date.getMonth() + 1) +
-          "-" +
-          date.getFullYear() +
-          " " +
-          hour, //dd-mm-yyyy jam:menit
+        waktu_presensi: dateFormat,
         dosen: {
           id: findDosen._id,
           nama: findDosen.nama,

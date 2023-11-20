@@ -21,12 +21,12 @@ router.put(
   upload.single("image"),
   UserController.editUser
 );
-router.patch("/changepassword", authentication, UserController.changePassword);
-router.delete(
-  "/:id",
+router.patch(
+  "/delete-user",
   authentication,
   authorizationAdmin,
   UserController.deleteUser
 );
+router.patch("/changepassword", authentication, UserController.changePassword);
 
 module.exports = router;

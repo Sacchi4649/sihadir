@@ -6,7 +6,7 @@ module.exports = async (request, _, next) => {
     } else {
       throw {
         message: "Tidak ada izin akses",
-        name: "UnauthorizedError",
+        name: "ForbiddenError",
       };
     }
   } catch (error) {

@@ -31,4 +31,11 @@ router.put(
   MahasiswaController.editMahasiswa
 );
 
+router.patch(
+  "/delete-mahasiswa",
+  authentication,
+  authorizationAdmin,
+  MahasiswaController.deleteMahasiswa
+);
+
 module.exports = router;
