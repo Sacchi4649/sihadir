@@ -5,7 +5,12 @@ const upload = require("../utils/cloudStorage");
 const MahasiswaController = require("../controllers/mahasiswaController");
 const authentication = require("../middlewares/authentication");
 const authorizationAdmin = require("../middlewares/authorizationAdmin");
-router.post("/", authentication, MahasiswaController.addMahasiswa);
+router.post(
+  "/",
+  authentication,
+  authorizationAdmin,
+  MahasiswaController.addMahasiswa
+);
 router.get(
   "/",
   authentication,
