@@ -32,9 +32,21 @@ class MahasiswaController {
   }
   static async getOneMahasiswa(request, response, next) {
     try {
-      const { username } = request.params;
+      const { id } = request.params;
       const findMahasiswa = await mahasiswaModel.findOne({
-        username: username,
+        _id: id,
+      });
+      response.status(200).json({ mahasiswa: findMahasiswa });
+    } catch (error) {
+      response.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  static async getProfileMahasiswa(request, response, next) {
+    try {
+      const { nim } = request.params;
+      const findMahasiswa = await mahasiswaModel.findOne({
+        nim: nim,
       });
       response.status(200).json({ mahasiswa: findMahasiswa });
     } catch (error) {

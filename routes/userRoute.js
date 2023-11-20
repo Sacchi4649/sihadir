@@ -4,25 +4,29 @@ const router = require("express").Router();
 const upload = require("../utils/cloudStorage");
 const UserController = require("../controllers/userController");
 const authentication = require("../middlewares/authentication");
-const authorization = require("../middlewares/authorization");
+const authorizationAdmin = require("../middlewares/authorizationAdmin");
 
-router.get("/", authentication, authorization, UserController.getAllUser);
-router.get("/:id", authentication, authorization, UserController.getOneUser);
-router.post("/", authentication, authorization, UserController.addUser);
 router.post("/login", UserController.login);
+router.post("/", authentication, authorizationAdmin, UserController.addUser);
+router.get("/", authentication, authorizationAdmin, UserController.getAllUser);
+router.get(
+  "/:id",
+  authentication,
+  authorizationAdmin,
+  UserController.getOneUser
+);
 router.put(
   "/:id",
   authentication,
-  authorization,
   upload.single("image"),
   UserController.editUser
 );
-router.patch(
-  "/changepassword",
+router.patch("/changepassword", authentication, UserController.changePassword);
+router.delete(
+  "/:id",
   authentication,
-  authorization,
-  UserController.changePassword
+  authorizationAdmin,
+  UserController.deleteUser
 );
-router.delete("/:id", authentication, authorization, UserController.deleteUser);
 
 module.exports = router;

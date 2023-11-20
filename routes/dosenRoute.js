@@ -4,14 +4,20 @@ const router = require("express").Router();
 const upload = require("../utils/cloudStorage");
 const DosenController = require("../controllers/dosenController");
 const authentication = require("../middlewares/authentication");
-const authorization = require("../middlewares/authorization");
+const authorizationAdmin = require("../middlewares/authorizationAdmin");
 
-router.post("/", authentication, DosenController.addDosen);
+router.post("/", authentication, authorizationAdmin, DosenController.addDosen);
 router.get("/", authentication, DosenController.getAllDosen);
-router.get("/:id", authentication, DosenController.getOneDosen);
+router.get(
+  "/:id",
+  authentication,
+  authorizationAdmin,
+  DosenController.getOneDosen
+);
 router.put(
   "/:id",
   authentication,
+  authorizationAdmin,
   upload.single("image"),
   DosenController.editDosen
 );

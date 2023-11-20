@@ -4,23 +4,29 @@ const router = require("express").Router();
 const upload = require("../utils/cloudStorage");
 const MahasiswaController = require("../controllers/mahasiswaController");
 const authentication = require("../middlewares/authentication");
-const authorization = require("../middlewares/authorization");
+const authorizationAdmin = require("../middlewares/authorizationAdmin");
 router.post("/", authentication, MahasiswaController.addMahasiswa);
 router.get(
   "/",
   authentication,
-  authorization,
+  authorizationAdmin,
   MahasiswaController.getAllMahasiswa
 );
 router.get(
-  "/:username",
+  "/:id",
   authentication,
-  authorization,
+  authorizationAdmin,
   MahasiswaController.getOneMahasiswa
+);
+router.get(
+  "/profile/:nim",
+  authentication,
+  MahasiswaController.getProfileMahasiswa
 );
 router.put(
   "/:id",
   authentication,
+  authorizationAdmin,
   upload.single("image"),
   MahasiswaController.editMahasiswa
 );

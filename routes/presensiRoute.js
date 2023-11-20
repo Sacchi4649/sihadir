@@ -4,27 +4,33 @@ const router = require("express").Router();
 const upload = require("../utils/cloudStorage");
 const PresensiController = require("../controllers/presensiController");
 const authentication = require("../middlewares/authentication");
-const authorization = require("../middlewares/authorization");
+const authorizationMahasiswa = require("../middlewares/authorizationMahasiswa");
+const authorizationDosen = require("../middlewares/authorizationDosen");
 
-router.get("/", authentication, authorization, PresensiController.getPresensi);
-router.post("/", authentication, authorization, PresensiController.isiPresensi);
+router.get("/", authentication, PresensiController.getPresensi);
+router.post(
+  "/mahasiswa",
+  authentication,
+  authorizationMahasiswa,
+  PresensiController.isiPresensi
+);
 router.post(
   "/alpha",
   authentication,
-  authorization,
+  authorizationDosen,
   PresensiController.isiAlphaMahasiswa
-);
-router.put(
-  "/",
-  authentication,
-  authorization,
-  upload.single("surat"),
-  PresensiController.koreksiPresensi
 );
 router.post(
   "/dosen",
   authentication,
-  authorization,
+  authorizationDosen,
   PresensiController.isiPresensiDosen
+);
+router.put(
+  "/",
+  authentication,
+  authorizationMahasiswa,
+  upload.single("surat"),
+  PresensiController.koreksiPresensi
 );
 module.exports = router;

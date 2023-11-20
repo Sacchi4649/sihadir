@@ -7,6 +7,11 @@ const jadwalModel = require("../models/jadwalSchema");
 const getHari = require("../utils/getHari");
 const kompensasiCounter = require("../utils/kompensasiCounter");
 const statusCounter = require("../utils/statusCounter");
+const utc = require("dayjs/plugin/utc");
+const timezone = require("dayjs/plugin/timezone");
+const dayjs = require("dayjs");
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 class presensiController {
   static async getPresensi(request, response, next) {
@@ -47,8 +52,10 @@ class presensiController {
       const userUsername = request.userUsername;
       const findMahasiswa = await mahasiswaModel.findOne({ nim: userUsername });
       const findJadwal = await jadwalModel.findOne({ _id: idJadwal });
+      // const date = new Date(dayjs.tz(dayjs(), "Asia/Jakarta").format());
       const date = new Date();
       const day = getHari(date.getDay());
+      console.log(dayjs.tz("Asia/Jakarta").format());
       const hour = `${
         date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
       }:${(date.getMinutes() < 10 ? "0" : "") + date.getMinutes()}`;
@@ -61,6 +68,24 @@ class presensiController {
           message: "Role admin tidak bisa presensi!",
           name: "ForbiddenError",
         };
+
+      // const cekPresensi = await presensiModel.find({
+      //   waktu_presensi: {
+      //     $regex:
+      //       date.getDate() +
+      //       "-" +
+      //       (date.getMonth() + 1) +
+      //       "-" +
+      //       date.getFullYear(),
+      //   },
+      // });
+      // console.log(cekPresensi);
+      // if (cekPresensi) {
+      //   throw {
+      //     message: "Anda sudah presensi hari ini",
+      //     name: "BadRequestError",
+      //   };
+      // }
       const {
         _id,
         hari,
@@ -330,27 +355,26 @@ class presensiController {
       }:${(date.getMinutes() < 10 ? "0" : "") + date.getMinutes()}`;
       // date.getHours() + ":" + date.getMinutes();
 
-      const findPresensi = await presensiModel.find({
-        waktu_presensi: {
-          $regex:
-            date.getDate() +
-            "-" +
-            (date.getMonth() + 1) +
-            "-" +
-            date.getFullYear() +
-            ".*",
-        },
-      });
+      // const findPresensi = await presensiModel.find({
+      //   waktu_presensi: {
+      //     $regex:
+      //       date.getDate() +
+      //       "-" +
+      //       (date.getMonth() + 1) +
+      //       "-" +
+      //       date.getFullYear(),
+      //   },
+      // });
 
-      if (findPresensi) {
-        throw {
-          message: "Anda sudah presensi hari ini",
-          name: "BadRequestError",
-        };
-      }
+      // if (findPresensi) {
+      //   throw {
+      //     message: "Anda sudah presensi hari ini",
+      //     name: "BadRequestError",
+      //   };
+      // }
       if (userRole == "admin" || userRole == "mahasiswa")
         throw {
-          message: "TIdak ada izin akses",
+          message: "Tidak ada izin akses",
           name: "ForbiddenError",
         };
 
