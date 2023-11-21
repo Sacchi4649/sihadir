@@ -43,4 +43,6 @@ PORT=
 SECRET_KEY=(untuk authentication, isi bebas)
 
 ## Catatan
-Jangan lupa siapkan service account key dari google cloud agar dapat mengupload gambar ke cloud storage.
+-Jalankan perintah "npm install" setelah git clone untuk meninstall dependecies yang digunakan.
+
+-Jangan lupa siapkan service account key dari google cloud agar dapat mengupload gambar ke cloud storage.
