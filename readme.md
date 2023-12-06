@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://github.com/Sacchi4649/sihadir-backend/blob/master/logo_SIHADIR.png" >
 </p>
-Repository ini adalah backend untuk project SIHADIR yang dikerjakan untuk memenuhi tugas mata kuliah PBL (Project Based Learning).
+Repository ini adalah repository backend untuk project SIHADIR yang dikerjakan untuk memenuhi tugas mata kuliah PBL (Project Based Learning).
 
 Team 2
 
@@ -43,6 +43,14 @@ PORT=
 SECRET_KEY=(untuk authentication, isi bebas)
 
 ## Catatan
+
 -Jalankan perintah "npm install" setelah git clone untuk meninstall dependecies yang digunakan.
 
 -Jangan lupa siapkan service account key dari google cloud agar dapat mengupload gambar ke cloud storage.
+
+-Untuk running backend, jalankan nodemon server atau node server
+
+-Untuk running frontend, jalankan npm run dev
+
+Link repo frontend:
+https://github.com/Sacchi4649/sihadir-frontend.git
