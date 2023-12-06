@@ -26,7 +26,7 @@ Team 2
 ## API Documentation
 
 Postman collection:
-https://api.postman.com/collections/27992524-70757f58-8277-42a9-9755-903aff476c26?access_key=PMAT-01HDZZ6AN9GVB1WFAZX3RYPB2E
+https://api.postman.com/collections/27992524-3ee58791-f344-44f5-92ef-4f571bcb5afc?access_key=PMAT-01HFR07H23TNFXTYW9XYK1R7TD
 
 Environment Postman:
 PBLURL = https://sihadir-backend-dot-sihadir-401613.et.r.appspot.com
